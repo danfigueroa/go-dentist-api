@@ -45,17 +45,19 @@ func InitDynamoDB() {
 	DBClient = dynamodb.NewFromConfig(cfg)
 	log.Println("DynamoDB Local connected")
 
-	createDentistTable()
+	ensureDentistTableExists()
 }
 
-func createDentistTable() {
+// ensureDentistTableExists verifica se a tabela "Dentists" já existe.
+// Caso não exista, cria a tabela. Se já existir, não faz nada.
+func ensureDentistTableExists() {
 	_, err := DBClient.DescribeTable(context.TODO(), &dynamodb.DescribeTableInput{
 		TableName: aws.String("Dentists"),
 	})
 
 	if err != nil {
 		var resourceNotFoundError *types.ResourceNotFoundException
-		if ok := errorAs(err, &resourceNotFoundError); ok {
+		if errors.As(err, &resourceNotFoundError) {
 			log.Println("Table 'Dentists' does not exist. Creating table...")
 			_, err := DBClient.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
 				TableName: aws.String("Dentists"),
@@ -83,9 +85,7 @@ func createDentistTable() {
 		} else {
 			log.Fatalf("Failed to describe table: %v", err)
 		}
+	} else {
+		log.Println("Table 'Dentists' already exists, skipping creation.")
 	}
-}
-
-func errorAs(err error, target interface{}) bool {
-	return err != nil && errors.As(err, target)
 }
