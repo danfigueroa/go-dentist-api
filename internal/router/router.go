@@ -13,8 +13,8 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/dentist", handlers.CreateDentist).Methods(http.MethodPost)
 	r.HandleFunc("/dentists", handlers.GetAllDentists).Methods(http.MethodGet)
 	r.HandleFunc("/dentist/{id}", handlers.GetDentistByID).Methods(http.MethodGet)
-	// r.HandleFunc("/dentists/{id}", handlers.UpdateDentist).Methods(http.MethodPut)
-	// r.HandleFunc("/dentists/{id}", handlers.DeleteDentist).Methods(http.MethodDelete)
+	r.HandleFunc("/dentist/{id}", handlers.UpdateDentist).Methods(http.MethodPut)
+	r.HandleFunc("/dentist/{id}", handlers.DeleteDentist).Methods(http.MethodDelete)
 
 	return r
 }
