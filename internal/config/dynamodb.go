@@ -46,10 +46,9 @@ func InitDynamoDB() {
 	log.Println("DynamoDB Local connected")
 
 	ensureDentistTableExists()
+	ensureProcedureTableExists()
 }
 
-// ensureDentistTableExists verifica se a tabela "Dentists" já existe.
-// Caso não exista, cria a tabela. Se já existir, não faz nada.
 func ensureDentistTableExists() {
 	_, err := DBClient.DescribeTable(context.TODO(), &dynamodb.DescribeTableInput{
 		TableName: aws.String("Dentists"),
@@ -87,5 +86,45 @@ func ensureDentistTableExists() {
 		}
 	} else {
 		log.Println("Table 'Dentists' already exists, skipping creation.")
+	}
+}
+
+func ensureProcedureTableExists() {
+	_, err := DBClient.DescribeTable(context.TODO(), &dynamodb.DescribeTableInput{
+		TableName: aws.String("Procedures"),
+	})
+
+	if err != nil {
+		var resourceNotFoundError *types.ResourceNotFoundException
+		if errors.As(err, &resourceNotFoundError) {
+			log.Println("Table 'Procedures' does not exist. Creating table...")
+			_, err := DBClient.CreateTable(context.TODO(), &dynamodb.CreateTableInput{
+				TableName: aws.String("Procedures"),
+				KeySchema: []types.KeySchemaElement{
+					{
+						AttributeName: aws.String("ID"),
+						KeyType:       types.KeyTypeHash,
+					},
+				},
+				AttributeDefinitions: []types.AttributeDefinition{
+					{
+						AttributeName: aws.String("ID"),
+						AttributeType: types.ScalarAttributeTypeS,
+					},
+				},
+				ProvisionedThroughput: &types.ProvisionedThroughput{
+					ReadCapacityUnits:  aws.Int64(5),
+					WriteCapacityUnits: aws.Int64(5),
+				},
+			})
+			if err != nil {
+				log.Fatalf("Failed to create Procedures table: %v", err)
+			}
+			log.Println("Table 'Procedures' created successfully.")
+		} else {
+			log.Fatalf("Failed to describe Procedures table: %v", err)
+		}
+	} else {
+		log.Println("Table 'Procedures' already exists, skipping creation.")
 	}
 }

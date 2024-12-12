@@ -16,5 +16,11 @@ func SetupRouter() *mux.Router {
 	r.HandleFunc("/dentist/{id}", handlers.UpdateDentist).Methods(http.MethodPut)
 	r.HandleFunc("/dentist/{id}", handlers.DeleteDentist).Methods(http.MethodDelete)
 
+	r.HandleFunc("/procedure", handlers.CreateProcedure).Methods(http.MethodPost)
+	r.HandleFunc("/procedures", handlers.GetAllProcedures).Methods(http.MethodGet)
+	r.HandleFunc("/procedure/{id}", handlers.GetProcedureByID).Methods(http.MethodGet)
+	r.HandleFunc("/procedure/{id}", handlers.UpdateProcedure).Methods(http.MethodPut)
+	r.HandleFunc("/procedure/{id}", handlers.DeleteProcedure).Methods(http.MethodDelete)
+
 	return r
 }
