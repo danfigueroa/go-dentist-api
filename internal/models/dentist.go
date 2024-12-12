@@ -1,32 +1,34 @@
 package models
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
 
 type Dentist struct {
-	ID        string `json:"id"`
-	Name      string `json:"name"`
-	Email     string `json:"email"`
-	Phone     string `json:"phone"`
-	CRO       string `json:"cro"`
-	Country   string `json:"country"`
-	Specialty string `json:"specialty"`
-	CreatedAt string `json:"created_at"`
-	UpdatedAt string `json:"updated_at"`
+	ID        string    `json:"id,omitempty"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	CRO       string    `json:"cro"`
+	Country   string    `json:"country"`
+	Specialty string    `json:"specialty"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func (d *Dentist) IsValid() error {
-	fields := map[string]string{
-		"id":      d.ID,
-		"name":    d.Name,
-		"email":   d.Email,
-		"CRO":     d.CRO,
-		"country": d.Country,
+	if d.Name == "" {
+		return fmt.Errorf("name is required")
 	}
-
-	for field, value := range fields {
-		if value == "" {
-			return fmt.Errorf("%s is required", field)
-		}
+	if d.Email == "" {
+		return fmt.Errorf("email is required")
+	}
+	if d.CRO == "" {
+		return fmt.Errorf("CRO is required")
+	}
+	if d.Country == "" {
+		return fmt.Errorf("country is required")
 	}
 
 	return nil
