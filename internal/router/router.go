@@ -1,7 +1,7 @@
 package router
 
 import (
-	"go-dentist-api/internal/handlers"
+	"dental-saas/internal/handlers"
 
 	"github.com/gorilla/mux"
 )

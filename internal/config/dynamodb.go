@@ -16,7 +16,6 @@ import (
 var DBClient *dynamodb.Client
 
 func InitDynamoDB() {
-	// Verificar se existe uma variável de ambiente para o endpoint do DynamoDB
 	dynamodbEndpoint := "http://localhost:8000"
 	if endpoint := os.Getenv("DYNAMODB_ENDPOINT"); endpoint != "" {
 		dynamodbEndpoint = endpoint
