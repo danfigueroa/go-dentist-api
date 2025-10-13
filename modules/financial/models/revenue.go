@@ -9,11 +9,11 @@ import (
 type PaymentMethod string
 
 const (
-	PaymentMethodCash       PaymentMethod = "cash"
-	PaymentMethodCard       PaymentMethod = "card"
-	PaymentMethodPix        PaymentMethod = "pix"
-	PaymentMethodBankSlip   PaymentMethod = "bank_slip"
-	PaymentMethodInsurance  PaymentMethod = "insurance"
+	PaymentMethodCash      PaymentMethod = "cash"
+	PaymentMethodCard      PaymentMethod = "card"
+	PaymentMethodPix       PaymentMethod = "pix"
+	PaymentMethodBankSlip  PaymentMethod = "bank_slip"
+	PaymentMethodInsurance PaymentMethod = "insurance"
 )
 
 // PaymentStatus representa o status do pagamento

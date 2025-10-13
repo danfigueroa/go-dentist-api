@@ -9,12 +9,12 @@ import (
 type ExpenseCategory string
 
 const (
-	ExpenseCategoryMaterials  ExpenseCategory = "materials"
-	ExpenseCategoryRent       ExpenseCategory = "rent"
-	ExpenseCategoryUtilities  ExpenseCategory = "utilities"
-	ExpenseCategoryStaff      ExpenseCategory = "staff"
-	ExpenseCategoryEquipment  ExpenseCategory = "equipment"
-	ExpenseCategoryOther      ExpenseCategory = "other"
+	ExpenseCategoryMaterials ExpenseCategory = "materials"
+	ExpenseCategoryRent      ExpenseCategory = "rent"
+	ExpenseCategoryUtilities ExpenseCategory = "utilities"
+	ExpenseCategoryStaff     ExpenseCategory = "staff"
+	ExpenseCategoryEquipment ExpenseCategory = "equipment"
+	ExpenseCategoryOther     ExpenseCategory = "other"
 )
 
 // Expense representa um gasto da clínica

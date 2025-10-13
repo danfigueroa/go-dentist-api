@@ -1,168 +1,340 @@
-# Dental SaaS Platform
+# Dental SaaS API
 
-Uma plataforma SaaS modular para gestão completa de clínicas odontológicas, construída com **Go** e **AWS DynamoDB**.
+A comprehensive SaaS platform for dental clinic management built with **Go** and **DynamoDB**, following **Hexagonal Architecture** principles.
 
-## 🏗️ Arquitetura Modular
+## 🏗️ Architecture Overview
 
-O projeto foi estruturado com uma arquitetura modular que permite fácil expansão e manutenção:
+This project implements a **Hexagonal Architecture** (Ports and Adapters) pattern, ensuring clean separation of concerns and high testability:
 
 ```
-dental-saas/
-├── cmd/                    # Ponto de entrada da aplicação
-│   └── main.go
-├── shared/                 # Recursos compartilhados entre módulos
-│   ├── config/            # Configurações (DynamoDB, etc.)
-│   └── router/            # Router principal
-├── modules/               # Módulos de funcionalidades
-│   ├── dental/           # Módulo odontológico
-│   │   ├── models/       # Modelos de dados
-│   │   ├── handlers/     # Controladores HTTP
-│   │   └── router/       # Rotas específicas do módulo
-│   └── financial/        # Módulo financeiro (em desenvolvimento)
-│       └── models/       # Modelos financeiros
-├── docs/                 # Documentação Swagger
-└── docker-compose.yml    # Configuração Docker
+internal/
+├── core/                   # Business Logic Layer
+│   ├── domain/            # Domain entities and business rules
+│   └── ports/             # Interfaces (repositories & services)
+│       ├── repositories/  # Data access interfaces
+│       └── services/      # Business service interfaces
+├── application/           # Application Layer
+│   └── usecases/         # Use case implementations
+└── adapters/             # Infrastructure Layer
+    ├── primary/          # Input adapters (HTTP handlers)
+    │   └── http/
+    │       ├── handlers/ # HTTP request handlers
+    │       └── routes/   # Route definitions
+    └── secondary/        # Output adapters (databases, external APIs)
+        └── database/     # Database implementations
 ```
 
-## 📦 Módulos Disponíveis
+## 🚀 Technologies Used
 
-### 1. Módulo Dental (Implementado)
-Gerenciamento completo das operações odontológicas:
-- **Dentistas**: Cadastro, consulta, atualização e remoção
-- **Pacientes**: Gestão de informações dos pacientes
-- **Procedimentos**: Catálogo de procedimentos odontológicos
-- **Agendamentos**: Sistema de agendamento de consultas
+- **Go 1.22**: Modern, efficient programming language
+- **Gorilla Mux**: HTTP router and URL matcher
+- **AWS DynamoDB**: NoSQL database for scalable data storage
+- **DynamoDB Local**: Local development database
+- **Swagger/OpenAPI**: API documentation and testing
+- **Docker & Docker Compose**: Containerization and orchestration
+- **UUID**: Unique identifier generation
+- **Hexagonal Architecture**: Clean architecture pattern
 
-### 2. Módulo Financeiro (Estrutura Criada)
-Gestão financeira da clínica:
-- **Receitas**: Controle de entradas financeiras
-- **Despesas**: Gestão de gastos (materiais, aluguel, funcionários, etc.)
-- **Notas Fiscais**: Emissão e controle de notas fiscais
-- **Relatórios**: Análises financeiras (planejado)
+## 📦 Features
 
-## 🚀 Como Executar
+### Currently Implemented
+- ✅ **Dentist Management**: Complete CRUD operations for dentists
+- ✅ **Domain Models**: Patient, Appointment, Procedure, Clinic entities
+- ✅ **Use Cases**: Business logic implementation
+- ✅ **Mock Repositories**: In-memory data storage for development
+- ✅ **API Documentation**: Swagger/OpenAPI integration
+- ✅ **Docker Support**: Full containerization
 
-### Pré-requisitos
-- Docker e Docker Compose
-- Go 1.22+ (para desenvolvimento)
+### In Development
+- 🔄 **HTTP Routes**: Patient, Appointment, Procedure, Clinic endpoints
+- 🔄 **Database Integration**: DynamoDB implementation
+- 🔄 **Authentication**: JWT-based authentication system
 
-### Executando com Docker Compose
+## 🚀 Quick Start
 
-1. Clone o repositório:
+### Prerequisites
+- Docker and Docker Compose
+- Go 1.22+ (for local development)
+
+### Running with Docker
+
+1. **Clone the repository:**
 ```bash
 git clone <repository-url>
-cd dental-saas
+cd go-dentist-api
 ```
 
-2. Execute com Docker Compose:
+2. **Start the application:**
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-3. Acesse a aplicação:
+3. **Access the services:**
 - **API**: http://localhost:8080
-- **Documentação Swagger**: http://localhost:8080/swagger/
+- **Swagger Documentation**: http://localhost:8080/swagger/
 - **DynamoDB Local**: http://localhost:8000
 
-### Executando em Desenvolvimento
+### Local Development
 
-1. Inicie o DynamoDB Local:
+1. **Start DynamoDB Local:**
 ```bash
 docker-compose up dynamodb-local -d
 ```
 
-2. Execute a aplicação:
+2. **Run the application:**
 ```bash
 go run cmd/main.go
 ```
 
-## 📚 API Endpoints
+3. **Build the application:**
+```bash
+go build -o main cmd/main.go
+./main
+```
 
-### Informações Gerais
-- `GET /health` - Status da aplicação
-- `GET /api/v1` - Informações da API e módulos disponíveis
+## 📚 API Documentation
 
-### Módulo Dental (`/api/v1/dental`)
+### Base URL
+```
+http://localhost:8080/api/v1
+```
 
-#### Dentistas
-- `POST /api/v1/dental/dentist` - Criar dentista
-- `GET /api/v1/dental/dentist` - Listar todos os dentistas
-- `GET /api/v1/dental/dentist/{id}` - Buscar dentista por ID
-- `GET /api/v1/dental/dentist/name/{name}` - Buscar dentista por nome
-- `GET /api/v1/dental/dentist/cro/{cro}` - Buscar dentista por CRO
-- `PUT /api/v1/dental/dentist/{id}` - Atualizar dentista
-- `DELETE /api/v1/dental/dentist/{id}` - Remover dentista
+### Available Endpoints
 
-#### Pacientes, Procedimentos e Agendamentos
-*Rotas similares serão migradas para a nova estrutura modular*
+#### Dentists (Fully Implemented)
 
-### Módulo Financeiro (`/api/v1/financial`)
-*Em desenvolvimento - estrutura de modelos criada*
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/dentists` | List all dentists |
+| `POST` | `/dentists` | Create a new dentist |
+| `GET` | `/dentists/{id}` | Get dentist by ID |
+| `PUT` | `/dentists/{id}` | Update dentist |
+| `DELETE` | `/dentists/{id}` | Delete dentist |
+| `GET` | `/dentists/search?cro={cro}` | Search dentist by CRO |
+| `GET` | `/dentists/search?name={name}` | Search dentists by name |
+| `GET` | `/dentists/clinic/{clinicId}` | Get dentists by clinic |
 
-## 🛠️ Tecnologias Utilizadas
+#### Query Parameters for Dentists
+- `clinic_id`: Filter by clinic ID
+- `active`: Filter by active status (true/false)
+- `specialty`: Filter by specialty
 
-- **Go 1.22**: Linguagem de programação
-- **Gorilla Mux**: Router HTTP
-- **AWS SDK Go v2**: Cliente DynamoDB
-- **DynamoDB Local**: Banco de dados NoSQL
-- **Swagger**: Documentação da API
-- **Docker**: Containerização
-- **UUID**: Geração de identificadores únicos
+#### Example Requests
 
-## 🔧 Configuração
+**Create Dentist:**
+```bash
+curl -X POST "http://localhost:8080/api/v1/dentists" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Dr. John Smith",
+    "cro": "CRO-SP-12345",
+    "email": "john.smith@clinic.com",
+    "phone": "+1 555-0123",
+    "specialty": "Orthodontics",
+    "clinic_id": "clinic-123"
+  }'
+```
 
-### Variáveis de Ambiente
-- `DYNAMODB_ENDPOINT`: Endpoint do DynamoDB (padrão: http://localhost:8000)
+**List Dentists:**
+```bash
+curl -X GET "http://localhost:8080/api/v1/dentists"
+```
 
-### Tabelas DynamoDB
-As seguintes tabelas são criadas automaticamente:
+**Filter by Clinic:**
+```bash
+curl -X GET "http://localhost:8080/api/v1/dentists?clinic_id=clinic-123"
+```
 
-**Módulo Dental:**
-- `Dentists`
-- `Patients`
-- `Procedures`
-- `Appointments`
+#### Response Format
 
-**Módulo Financeiro:**
-- `Expenses`
-- `Revenues`
-- `Invoices`
+```json
+{
+  "id": "uuid-generated-id",
+  "clinic_id": "clinic-123",
+  "name": "Dr. John Smith",
+  "cro": "CRO-SP-12345",
+  "specialty": "Orthodontics",
+  "phone": "+1 555-0123",
+  "email": "john.smith@clinic.com",
+  "active": true,
+  "created_at": "2025-01-13T22:03:13.421363Z",
+  "updated_at": "2025-01-13T22:03:13.421363Z"
+}
+```
 
-## 🚧 Roadmap
+### Planned Endpoints (Domain Models Ready)
 
-### Próximas Implementações
-1. **Migração Completa do Módulo Dental**
-   - Migrar handlers de pacientes, procedimentos e agendamentos
-   - Atualizar rotas para nova estrutura
+#### Patients
+- `GET /patients` - List patients
+- `POST /patients` - Create patient
+- `GET /patients/{id}` - Get patient by ID
+- `PUT /patients/{id}` - Update patient
+- `DELETE /patients/{id}` - Delete patient
 
-2. **Implementação do Módulo Financeiro**
-   - Handlers para receitas, despesas e notas fiscais
-   - Relatórios financeiros
-   - Integração com APIs de pagamento
+#### Appointments
+- `GET /appointments` - List appointments
+- `POST /appointments` - Create appointment
+- `GET /appointments/{id}` - Get appointment by ID
+- `PUT /appointments/{id}` - Update appointment
+- `DELETE /appointments/{id}` - Delete appointment
 
-3. **Novos Módulos Futuros**
-   - Módulo de Estoque
-   - Módulo de Relatórios e Analytics
-   - Módulo de Comunicação (SMS/Email)
-   - Módulo de Agendamento Online
+#### Procedures
+- `GET /procedures` - List procedures
+- `POST /procedures` - Create procedure
+- `GET /procedures/{id}` - Get procedure by ID
+- `PUT /procedures/{id}` - Update procedure
+- `DELETE /procedures/{id}` - Delete procedure
 
-### Melhorias Técnicas
-- Implementação de middleware de autenticação
-- Testes unitários e de integração
-- Logging estruturado
-- Métricas e monitoramento
-- Cache Redis
-- API Rate Limiting
+#### Clinics
+- `GET /clinics` - List clinics
+- `POST /clinics` - Create clinic
+- `GET /clinics/{id}` - Get clinic by ID
+- `PUT /clinics/{id}` - Update clinic
+- `DELETE /clinics/{id}` - Delete clinic
 
-## 📝 Contribuição
+## 🏗️ Project Structure
 
-Este é um projeto pessoal em desenvolvimento. Sugestões e melhorias são bem-vindas!
+```
+go-dentist-api/
+├── cmd/
+│   └── main.go                    # Application entry point
+├── internal/
+│   ├── core/
+│   │   ├── domain/               # Domain entities
+│   │   │   ├── appointment.go
+│   │   │   ├── clinic.go
+│   │   │   ├── dentist.go
+│   │   │   ├── patient.go
+│   │   │   └── procedure.go
+│   │   └── ports/
+│   │       ├── repositories/     # Repository interfaces
+│   │       └── services/         # Service interfaces
+│   ├── application/
+│   │   └── usecases/            # Business logic implementation
+│   └── adapters/
+│       ├── primary/
+│       │   └── http/
+│       │       ├── handlers/    # HTTP handlers
+│       │       └── routes/      # Route definitions
+│       └── secondary/
+│           └── database/        # Database implementations
+├── docs/                        # Swagger documentation
+├── docker-compose.yml          # Docker configuration
+├── Dockerfile                  # Container definition
+└── README.md                   # This file
+```
 
-## 📄 Licença
+## 🧪 Testing
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+### Manual API Testing
+
+Use the provided test script:
+```bash
+chmod +x test_api.sh
+./test_api.sh
+```
+
+### Using cURL
+
+Test the dentist endpoints:
+```bash
+# List all dentists
+curl -X GET "http://localhost:8080/api/v1/dentists"
+
+# Create a dentist
+curl -X POST "http://localhost:8080/api/v1/dentists" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Dr. Test", "cro": "CRO-TEST-001", "email": "test@clinic.com", "phone": "+1 555-0001", "specialty": "General", "clinic_id": "clinic-123"}'
+```
+
+### Using Swagger UI
+
+Visit http://localhost:8080/swagger/ to interact with the API through the Swagger interface.
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `DYNAMODB_ENDPOINT` | DynamoDB endpoint URL | `http://localhost:8000` |
+| `PORT` | Application port | `8080` |
+
+### DynamoDB Tables
+
+The application uses the following DynamoDB tables:
+- `Dentists` - Dentist information
+- `Patients` - Patient records
+- `Appointments` - Appointment scheduling
+- `Procedures` - Medical procedures
+- `Clinics` - Clinic information
+
+## 🚧 Development Roadmap
+
+### Phase 1: Core API (Current)
+- ✅ Hexagonal architecture implementation
+- ✅ Domain models and use cases
+- ✅ Dentist endpoints (complete)
+- 🔄 Patient, Appointment, Procedure, Clinic endpoints
+
+### Phase 2: Database Integration
+- 🔄 DynamoDB repository implementations
+- 🔄 Database migrations and setup
+- 🔄 Data validation and constraints
+
+### Phase 3: Authentication & Security
+- 🔄 JWT authentication
+- 🔄 Role-based access control
+- 🔄 API rate limiting
+- 🔄 Input validation and sanitization
+
+### Phase 4: Advanced Features
+- 🔄 File upload (patient documents, X-rays)
+- 🔄 Email notifications
+- 🔄 Appointment reminders
+- 🔄 Reporting and analytics
+
+### Phase 5: Production Ready
+- 🔄 Comprehensive testing suite
+- 🔄 Logging and monitoring
+- 🔄 Performance optimization
+- 🔄 CI/CD pipeline
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow Go best practices and conventions
+- Maintain the hexagonal architecture pattern
+- Write comprehensive tests for new features
+- Update documentation for API changes
+- Use meaningful commit messages
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Daniel Figueroa**
+- Email: danielmfigueroa@gmail.com
+- GitHub: [Your GitHub Profile]
 
 ---
 
-**Desenvolvido por Daniel Figueroa**  
-📧 danielmfigueroa@gmail.com
+## 📞 Support
+
+If you have any questions or need help with the project, please:
+1. Check the [Swagger documentation](http://localhost:8080/swagger/)
+2. Review the existing issues
+3. Create a new issue with detailed information
+
+---
+
+*Built with ❤️ using Go and modern software architecture principles*

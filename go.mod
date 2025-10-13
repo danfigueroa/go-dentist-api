@@ -1,4 +1,4 @@
-module dental-saas
+module go-dentist-api
 
 go 1.22.0
 

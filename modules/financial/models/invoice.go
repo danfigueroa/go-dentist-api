@@ -33,22 +33,22 @@ type InvoiceItem struct {
 
 // Invoice representa uma nota fiscal
 type Invoice struct {
-	ID           string          `json:"id"`
-	Number       string          `json:"number"`
-	Type         InvoiceType     `json:"type"`
-	Status       InvoiceStatus   `json:"status"`
-	PatientID    string          `json:"patient_id"`
-	PatientName  string          `json:"patient_name"`
-	PatientEmail string          `json:"patient_email"`
-	Items        []InvoiceItem   `json:"items"`
-	Subtotal     float64         `json:"subtotal"`
-	TaxAmount    float64         `json:"tax_amount"`
-	TotalAmount  float64         `json:"total_amount"`
-	IssueDate    time.Time       `json:"issue_date"`
-	DueDate      time.Time       `json:"due_date"`
-	Notes        string          `json:"notes,omitempty"`
-	CreatedAt    time.Time       `json:"created_at"`
-	UpdatedAt    time.Time       `json:"updated_at"`
+	ID           string        `json:"id"`
+	Number       string        `json:"number"`
+	Type         InvoiceType   `json:"type"`
+	Status       InvoiceStatus `json:"status"`
+	PatientID    string        `json:"patient_id"`
+	PatientName  string        `json:"patient_name"`
+	PatientEmail string        `json:"patient_email"`
+	Items        []InvoiceItem `json:"items"`
+	Subtotal     float64       `json:"subtotal"`
+	TaxAmount    float64       `json:"tax_amount"`
+	TotalAmount  float64       `json:"total_amount"`
+	IssueDate    time.Time     `json:"issue_date"`
+	DueDate      time.Time     `json:"due_date"`
+	Notes        string        `json:"notes,omitempty"`
+	CreatedAt    time.Time     `json:"created_at"`
+	UpdatedAt    time.Time     `json:"updated_at"`
 }
 
 // IsValid verifica se os campos obrigatórios da nota fiscal estão preenchidos
