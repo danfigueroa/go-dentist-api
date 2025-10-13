@@ -320,14 +320,6 @@ The application uses the following DynamoDB tables:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👨‍💻 Author
-
-**Daniel Figueroa**
-- Email: danielmfigueroa@gmail.com
-- GitHub: [Your GitHub Profile]
-
----
-
 ## 📞 Support
 
 If you have any questions or need help with the project, please:
