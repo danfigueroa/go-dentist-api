@@ -39,15 +39,18 @@ internal/
 
 ### Currently Implemented
 - ✅ **Dentist Management**: Complete CRUD operations for dentists
+- ✅ **Patient Management**: Complete CRUD operations and medical records
+- ✅ **Medical History**: Allergies, medications, medical conditions
+- ✅ **Procedure History**: Patient procedure tracking
+- ✅ **Exam Management**: Medical exam tracking and results
 - ✅ **Domain Models**: Patient, Appointment, Procedure, Clinic entities
 - ✅ **Use Cases**: Business logic implementation
-- ✅ **Mock Repositories**: In-memory data storage for development
+- ✅ **DynamoDB Integration**: Real database implementation
 - ✅ **API Documentation**: Swagger/OpenAPI integration
 - ✅ **Docker Support**: Full containerization
 
 ### In Development
-- 🔄 **HTTP Routes**: Patient, Appointment, Procedure, Clinic endpoints
-- 🔄 **Database Integration**: DynamoDB implementation
+- 🔄 **HTTP Routes**: Appointment, Procedure, Clinic endpoints
 - 🔄 **Authentication**: JWT-based authentication system
 
 ## 🚀 Quick Start
@@ -162,14 +165,61 @@ curl -X GET "http://localhost:8080/api/v1/dentists?clinic_id=clinic-123"
 }
 ```
 
-### Planned Endpoints (Domain Models Ready)
+#### Patients (Fully Implemented)
 
-#### Patients
-- `GET /patients` - List patients
-- `POST /patients` - Create patient
-- `GET /patients/{id}` - Get patient by ID
-- `PUT /patients/{id}` - Update patient
-- `DELETE /patients/{id}` - Delete patient
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/patients` | Create a new patient |
+| `GET` | `/patients/{id}` | Get patient by ID |
+| `GET` | `/patients/cpf/{cpf}` | Search patient by CPF |
+| `GET` | `/clinics/{clinicId}/patients` | List patients by clinic |
+| `GET` | `/clinics/{clinicId}/patients/search?name={name}` | Search patients by name |
+| `POST` | `/patients/{id}/procedures` | Add procedure to patient |
+| `GET` | `/patients/{id}/procedures` | List patient procedures |
+| `POST` | `/patients/{id}/exams` | Add exam to patient |
+| `GET` | `/patients/{id}/exams` | List patient exams |
+| `PUT` | `/patients/{id}/medical-history` | Update medical history |
+
+#### Example Requests for Patients
+
+**Create Patient:**
+```bash
+curl -X POST "http://localhost:8080/api/v1/patients" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "João Silva",
+    "cpf": "123.456.789-00",
+    "email": "joao.silva@email.com",
+    "phone": "+55 11 99999-9999",
+    "birth_date": "1990-05-15",
+    "clinic_id": "clinic-123",
+    "address": {
+      "street": "Rua das Flores, 123",
+      "city": "São Paulo",
+      "state": "SP",
+      "zip_code": "01234-567"
+    }
+  }'
+```
+
+**Search by CPF:**
+```bash
+curl -X GET "http://localhost:8080/api/v1/patients/cpf/123.456.789-00"
+```
+
+**Add Medical History:**
+```bash
+curl -X PUT "http://localhost:8080/api/v1/patients/{id}/medical-history" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "allergies": ["Penicilina", "Látex"],
+    "medications": ["Losartana 50mg"],
+    "medical_conditions": ["Hipertensão"],
+    "notes": "Paciente com histórico de hipertensão controlada"
+  }'
+```
+
+### Planned Endpoints (Domain Models Ready)
 
 #### Appointments
 - `GET /appointments` - List appointments
@@ -236,7 +286,7 @@ chmod +x test_api.sh
 
 ### Using cURL
 
-Test the dentist endpoints:
+Test the dentist and patient endpoints:
 ```bash
 # List all dentists
 curl -X GET "http://localhost:8080/api/v1/dentists"
@@ -245,6 +295,14 @@ curl -X GET "http://localhost:8080/api/v1/dentists"
 curl -X POST "http://localhost:8080/api/v1/dentists" \
   -H "Content-Type: application/json" \
   -d '{"name": "Dr. Test", "cro": "CRO-TEST-001", "email": "test@clinic.com", "phone": "+1 555-0001", "specialty": "General", "clinic_id": "clinic-123"}'
+
+# Create a patient
+curl -X POST "http://localhost:8080/api/v1/patients" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "João Silva", "cpf": "123.456.789-00", "email": "joao@email.com", "phone": "+55 11 99999-9999", "birth_date": "1990-05-15", "clinic_id": "clinic-123"}'
+
+# Search patient by CPF
+curl -X GET "http://localhost:8080/api/v1/patients/cpf/123.456.789-00"
 ```
 
 ### Using Swagger UI
@@ -275,12 +333,13 @@ The application uses the following DynamoDB tables:
 - ✅ Hexagonal architecture implementation
 - ✅ Domain models and use cases
 - ✅ Dentist endpoints (complete)
-- 🔄 Patient, Appointment, Procedure, Clinic endpoints
+- ✅ Patient endpoints (complete)
+- 🔄 Appointment, Procedure, Clinic endpoints
 
 ### Phase 2: Database Integration
-- 🔄 DynamoDB repository implementations
-- 🔄 Database migrations and setup
-- 🔄 Data validation and constraints
+- ✅ DynamoDB repository implementations
+- ✅ Database migrations and setup
+- ✅ Data validation and constraints
 
 ### Phase 3: Authentication & Security
 - 🔄 JWT authentication

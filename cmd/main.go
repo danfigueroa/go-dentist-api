@@ -31,10 +31,15 @@ func main() {
 	// Initialize repositories with DynamoDB client
 	clinicRepo := database.NewDynamoDBClinicRepository(config.DBClient, "Clinics")
 	dentistRepo := database.NewDynamoDBDentistRepository(config.DBClient, "Dentists")
+	patientRepo := database.NewDynamoDBPatientRepository(config.DBClient, "Patients")
 
+	// Initialize use cases
 	dentistUseCase := usecases.NewDentistUseCase(dentistRepo, clinicRepo)
+	patientUseCase := usecases.NewPatientUseCase(patientRepo)
 
+	// Initialize handlers
 	dentistHandler := handlers.NewDentistHandler(dentistUseCase)
+	patientHandler := handlers.NewPatientHandler(patientUseCase)
 
 	router := mux.NewRouter()
 
@@ -42,6 +47,7 @@ func main() {
 
 	apiRouter := router.PathPrefix("/api/v1").Subrouter()
 	routes.RegisterDentistRoutes(apiRouter, dentistHandler)
+	routes.RegisterPatientRoutes(apiRouter, patientHandler)
 
 	log.Println("Dental SaaS running on http://localhost:8080")
 	log.Println("API documentation available at http://localhost:8080/swagger/")

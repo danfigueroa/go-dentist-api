@@ -122,6 +122,40 @@ func ensurePatientTableExists() {
 					AttributeName: aws.String("ID"),
 					AttributeType: types.ScalarAttributeTypeS,
 				},
+				{
+					AttributeName: aws.String("CPF"),
+					AttributeType: types.ScalarAttributeTypeS,
+				},
+				{
+					AttributeName: aws.String("ClinicID"),
+					AttributeType: types.ScalarAttributeTypeS,
+				},
+			},
+			GlobalSecondaryIndexes: []types.GlobalSecondaryIndex{
+				{
+					IndexName: aws.String("cpf-index"),
+					KeySchema: []types.KeySchemaElement{
+						{
+							AttributeName: aws.String("CPF"),
+							KeyType:       types.KeyTypeHash,
+						},
+					},
+					Projection: &types.Projection{
+						ProjectionType: types.ProjectionTypeAll,
+					},
+				},
+				{
+					IndexName: aws.String("clinic-id-index"),
+					KeySchema: []types.KeySchemaElement{
+						{
+							AttributeName: aws.String("ClinicID"),
+							KeyType:       types.KeyTypeHash,
+						},
+					},
+					Projection: &types.Projection{
+						ProjectionType: types.ProjectionTypeAll,
+					},
+				},
 			},
 			BillingMode: types.BillingModePayPerRequest,
 		})
